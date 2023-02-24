@@ -7,6 +7,17 @@ class State:
         self.position = _position
         self.velocity = _velocity
 
+    def __repr__(self):
+        return "Position:\t{position}\nVelocity:\t{velocity}".format(
+            position=self.position, velocity=self.velocity
+        )
+
+    def __add__(self, rhs):
+        return State(self.position + rhs.position, self.velocity + rhs.velocity)
+
+    def __sub__(self, rhs):
+        return State(self.position - rhs.position, self.velocity - rhs.velocity)
+
     def get_list(self):
         return [self.position, self.velocity]
 
@@ -37,21 +48,18 @@ class Input:
 
 def _process_array(array, array_size):
     if isinstance(array, np.ndarray):
-        array = np.reshape(array, -1)
-        array = array.tolist()
+        array = np.reshape(array, -1).tolist()
 
     if len(array) != array_size:
         raise ValueError(
-            "The provided array has length: {lenth}. The array must be of length 1 (one value for each input).".format(
+            "The provided array has length: {length}. The array must be of length 1 (one value for each input).".format(
                 length=len(array)
             )
         )
 
     if not all([isinstance(x, float) for x in array]):
         raise ValueError(
-            "All values in the array must be of type double".format(
-                length=len(array)
-            )
+            "All values in the array must be of type double".format(length=len(array))
         )
 
     return array
